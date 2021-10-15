@@ -1,12 +1,26 @@
 const express = require('express')
-var morgan = require('morgan')
-var cors=require('cors')
-const app = express()
+const mongoose =require('mongoose');
+var morgan = require('morgan');
+const cors = require("cors");
+const app = express();
+const apiRouter=require('./routes');
 //const port = 3000
 
 app.use(morgan('dev'));
 app.use(cors());
+app.use(express.urlencoded({extended:true}));
+app.use(express.json());
+//mongodb local
 
+mongoose.Promise=global.Promise;
+//const urlDB='mongodb://localhost:27017/portafolio40'
+const urlDB='mongodb+srv://andres:admin123@testfinal.v8gdl.mongodb.net/test_final?retryWrites=true&w=majority'
+
+mongoose.connect(urlDB)
+.then(mongoose=>console.log('Conectado en atlas'))
+.catch(err=>console.log(err))
+
+app.use('/api',apiRouter);
 app.get('/', (req, res) => {
   res.status(200).send('Hello World!cccccccccccccc')
 })
